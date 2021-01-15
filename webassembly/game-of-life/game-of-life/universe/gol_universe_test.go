@@ -121,3 +121,88 @@ func TestGolRule1(t *testing.T) {
 		t.Errorf("Cell should be alive")
 	}
 }
+
+// func TestGolRule2(t *testing.T) {
+// 	universe := Universe{}
+
+// 	for i := 0; i < len(universe.Cells); i++ {
+// 		for j := 0; j < len(universe.Cells[i]); j++ {
+// 			universe.Cells[i][j].Alive = false
+// 		}
+// 	}
+// }
+func TestGolRule3(t *testing.T) {
+	universe := Universe{}
+
+	for i := 0; i < len(universe.Cells); i++ {
+		for j := 0; j < len(universe.Cells[i]); j++ {
+			universe.Cells[i][j].Alive = false
+		}
+	}
+
+	// cell 1 - 1 is alive
+	universe.Cells[1][1].Alive = true
+
+	// neighbours
+	universe.Cells[0][0].Alive = true
+	universe.Cells[0][1].Alive = true
+	universe.Cells[1][0].Alive = true
+
+	// 3 or less live neighbours
+	golRule3(&universe.Cells, 1, 1)
+
+	if !universe.Cells[1][1].Alive {
+		t.Errorf("Cell should be dead")
+	}
+
+	// greater than 3 live neighbours
+	universe.Cells[2][1].Alive = true
+
+	golRule3(&universe.Cells, 1, 1)
+
+	if universe.Cells[1][1].Alive {
+		t.Errorf("Cell should be dead")
+	}
+}
+
+func TestGolRule4(t *testing.T) {
+	universe := Universe{}
+
+	for i := 0; i < len(universe.Cells); i++ {
+		for j := 0; j < len(universe.Cells[i]); j++ {
+			universe.Cells[i][j].Alive = false
+		}
+	}
+
+	// neighbours
+	universe.Cells[0][0].Alive = true
+	universe.Cells[0][1].Alive = true
+
+	// Less than 3 live neighbours
+	golRule4(&universe.Cells, 1, 1)
+
+	if universe.Cells[1][1].Alive {
+		t.Errorf("Cell should be dead")
+	}
+
+	// neighbours
+	universe.Cells[2][0].Alive = true
+	universe.Cells[2][1].Alive = true
+
+	// Greater than 3 live neighbours
+	golRule4(&universe.Cells, 1, 1)
+
+	if universe.Cells[1][1].Alive {
+		t.Errorf("Cell should be dead")
+	}
+
+	// neighbours
+	universe.Cells[2][0].Alive = false
+
+	// Greater than 3 live neighbours
+	golRule4(&universe.Cells, 1, 1)
+
+	if !universe.Cells[1][1].Alive {
+		t.Errorf("Cell should be alive")
+	}
+}

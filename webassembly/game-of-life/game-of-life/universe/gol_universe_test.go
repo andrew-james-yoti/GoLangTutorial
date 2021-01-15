@@ -3,7 +3,7 @@ package universe
 import "testing"
 
 func TestCreateUniverse(t *testing.T) {
-	testUniverse := createUniverse()
+	testUniverse := CreateUniverse()
 	testCell := &testUniverse.Cells[0][0]
 	testCell.Alive = true
 
@@ -23,14 +23,14 @@ func TestGetRowStartIndex(t *testing.T) {
 }
 
 func TestGetRowEndIndex(t *testing.T) {
-	testUniverse := createUniverse()
+	testUniverse := CreateUniverse()
 
 	if (getRowEndIndex(&testUniverse.Cells, 0)) != 1 {
 		t.Errorf("row at index 0 should be +1 from the specified index %d", getRowEndIndex(&testUniverse.Cells, 0))
 	}
 
-	if (getRowEndIndex(&testUniverse.Cells, 10)) != 10 {
-		t.Errorf("row at index 10 should not be greater than the length of the array %d", getRowEndIndex(&testUniverse.Cells, 10))
+	if (getRowEndIndex(&testUniverse.Cells, 20)) != 20 {
+		t.Errorf("row at index 20 should not be greater than the length of the array %d", getRowEndIndex(&testUniverse.Cells, 10))
 	}
 }
 
@@ -45,14 +45,14 @@ func TestGetColStartIndex(t *testing.T) {
 }
 
 func TestGetColEndIndex(t *testing.T) {
-	testUniverse := createUniverse()
+	testUniverse := CreateUniverse()
 
 	if getColEndIndex(&testUniverse.Cells[0], 0) != 1 {
 		t.Errorf("column at index 0 should be +1 from the specified index %d", getColEndIndex(&testUniverse.Cells[0], 0))
 	}
 
-	if getColEndIndex(&testUniverse.Cells[0], 10) != 10 {
-		t.Errorf("column at index 10 should not be greater than the length of the array %d", getColEndIndex(&testUniverse.Cells[0], 10))
+	if getColEndIndex(&testUniverse.Cells[0], 20) != 20 {
+		t.Errorf("column at index 20 should not be greater than the length of the array %d", getColEndIndex(&testUniverse.Cells[0], 10))
 	}
 }
 
@@ -102,7 +102,7 @@ func TestGolRule1(t *testing.T) {
 	universe.Cells[1][1].Alive = true
 
 	// Test 1 - cell should die
-	golRule1(&universe.Cells, 1, 1)
+	GolRule1(&universe.Cells, 1, 1)
 
 	if universe.Cells[1][1].Alive {
 		t.Errorf("Cell should be dead")
@@ -115,22 +115,13 @@ func TestGolRule1(t *testing.T) {
 	universe.Cells[0][0].Alive = true
 	universe.Cells[0][1].Alive = true
 
-	golRule1(&universe.Cells, 1, 1)
+	GolRule1(&universe.Cells, 1, 1)
 
 	if !universe.Cells[1][1].Alive {
 		t.Errorf("Cell should be alive")
 	}
 }
 
-// func TestGolRule2(t *testing.T) {
-// 	universe := Universe{}
-
-// 	for i := 0; i < len(universe.Cells); i++ {
-// 		for j := 0; j < len(universe.Cells[i]); j++ {
-// 			universe.Cells[i][j].Alive = false
-// 		}
-// 	}
-// }
 func TestGolRule3(t *testing.T) {
 	universe := Universe{}
 
@@ -149,7 +140,7 @@ func TestGolRule3(t *testing.T) {
 	universe.Cells[1][0].Alive = true
 
 	// 3 or less live neighbours
-	golRule3(&universe.Cells, 1, 1)
+	GolRule3(&universe.Cells, 1, 1)
 
 	if !universe.Cells[1][1].Alive {
 		t.Errorf("Cell should be dead")
@@ -158,7 +149,7 @@ func TestGolRule3(t *testing.T) {
 	// greater than 3 live neighbours
 	universe.Cells[2][1].Alive = true
 
-	golRule3(&universe.Cells, 1, 1)
+	GolRule3(&universe.Cells, 1, 1)
 
 	if universe.Cells[1][1].Alive {
 		t.Errorf("Cell should be dead")
@@ -179,7 +170,7 @@ func TestGolRule4(t *testing.T) {
 	universe.Cells[0][1].Alive = true
 
 	// Less than 3 live neighbours
-	golRule4(&universe.Cells, 1, 1)
+	GolRule4(&universe.Cells, 1, 1)
 
 	if universe.Cells[1][1].Alive {
 		t.Errorf("Cell should be dead")
@@ -190,7 +181,7 @@ func TestGolRule4(t *testing.T) {
 	universe.Cells[2][1].Alive = true
 
 	// Greater than 3 live neighbours
-	golRule4(&universe.Cells, 1, 1)
+	GolRule4(&universe.Cells, 1, 1)
 
 	if universe.Cells[1][1].Alive {
 		t.Errorf("Cell should be dead")
@@ -200,7 +191,7 @@ func TestGolRule4(t *testing.T) {
 	universe.Cells[2][0].Alive = false
 
 	// Greater than 3 live neighbours
-	golRule4(&universe.Cells, 1, 1)
+	GolRule4(&universe.Cells, 1, 1)
 
 	if !universe.Cells[1][1].Alive {
 		t.Errorf("Cell should be alive")

@@ -33,3 +33,8 @@ Install module
 ```shell script
 go install example.com/mymod
 ```
+
+## Creating modules
+
+exported functions must start with Caps e.g. `func HelloWorld() {}`
+private functions must start with lowercase e.g. `func helloWorld() {}`

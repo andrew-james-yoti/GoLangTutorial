@@ -1,13 +1,14 @@
 package universe
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
 
-const rows = 10
-const columns = 10
+const rows = 20
+const columns = 20
+const randMax = 30
+const randThreshold = 20
 
 // Cell basic structual unit in Universe
 type Cell struct {
@@ -19,25 +20,18 @@ type Universe struct {
 	Cells [rows][columns]Cell
 }
 
-// RandCellValue returns a true / false
-func randCellValue() bool {
-	rand.Seed(time.Now().Unix())
-	if rand.Float32() > 0.5 {
-		fmt.Println("rand.Float32() %h", rand.Float32())
-		return true
-	}
-
-	return false
-}
-
 // CreateUniverse initialise cells in universe
-func createUniverse() *Universe {
+func CreateUniverse() *Universe {
 	universe := Universe{}
+	rand.Seed(time.Now().Unix())
 
 	for i := 0; i < len(universe.Cells); i++ {
 		for j := 0; j < len(universe.Cells[i]); j++ {
-			isAlive := randCellValue()
-			universe.Cells[i][j].Alive = isAlive
+
+			r := rand.Intn(randMax)
+			if r > randThreshold {
+				universe.Cells[i][j].Alive = true
+			}
 		}
 	}
 
@@ -93,8 +87,8 @@ func countAdjacentLiveCells(cells *[rows][columns]Cell, row int16, col int16) in
 	return liveCells
 }
 
-// Rule 1: Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
-func golRule1(cells *[rows][columns]Cell, row int16, col int16) {
+// GolRule1 Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
+func GolRule1(cells *[rows][columns]Cell, row int16, col int16) {
 	liveCells := countAdjacentLiveCells(cells, row, col)
 
 	if cells[row][col].Alive && liveCells < 2 {
@@ -103,18 +97,18 @@ func golRule1(cells *[rows][columns]Cell, row int16, col int16) {
 }
 
 // Rule 2: Any live cell with two or three live neighbours lives on to the next generation.
-func golRule2(cells *[rows][columns]Cell, row int16, col int16) {
-	liveCells := countAdjacentLiveCells(cells, row, col)
-	if cells[row][col].Alive {
-		if liveCells == 2 || liveCells == 3 {
-			// do nothing, cell stays alive
-		}
-	}
+// func GolRule2(cells *[rows][columns]Cell, row int16, col int16) {
+// 	liveCells := countAdjacentLiveCells(cells, row, col)
+// 	if cells[row][col].Alive {
+// 		if liveCells == 2 || liveCells == 3 {
+// 			// do nothing, cell stays alive
+// 		}
+// 	}
 
-}
+// }
 
-// Rule 3: Any live cell with more than three live neighbours dies, as if by overpopulation.
-func golRule3(cells *[rows][columns]Cell, row int16, col int16) {
+// GolRule3 Any live cell with more than three live neighbours dies, as if by overpopulation.
+func GolRule3(cells *[rows][columns]Cell, row int16, col int16) {
 	liveCells := countAdjacentLiveCells(cells, row, col)
 
 	if cells[row][col].Alive && liveCells > 3 {
@@ -122,19 +116,11 @@ func golRule3(cells *[rows][columns]Cell, row int16, col int16) {
 	}
 }
 
-// Rule 4: Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-func golRule4(cells *[rows][columns]Cell, row int16, col int16) {
+// GolRule4 Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+func GolRule4(cells *[rows][columns]Cell, row int16, col int16) {
 	liveCells := countAdjacentLiveCells(cells, row, col)
 
 	if cells[row][col].Alive == false && liveCells == 3 {
 		cells[row][col].Alive = true
 	}
-}
-
-// GaemOfLife recursive routine
-func gameOfLife() {
-	// just pause it
-	time.Sleep(300 * time.Millisecond)
-	// call it again
-	gameOfLife()
 }
